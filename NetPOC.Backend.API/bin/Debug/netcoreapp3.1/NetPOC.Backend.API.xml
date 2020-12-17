@@ -1,0 +1,42 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>NetPOC.Backend.API</name>
+    </assembly>
+    <members>
+        <member name="M:NetPOC.Backend.API.Controllers.CrudControllerBase`1.GetAll">
+            <summary>
+            Busca todos os objetos
+            </summary>
+            <returns>Lista de objetos/></returns>
+        </member>
+        <member name="M:NetPOC.Backend.API.Controllers.CrudControllerBase`1.GetById(System.Int32)">
+            <summary>
+            Busca um objeto de acordo com o ID fornecido
+            </summary>
+            <param name="id">ID do objeto a ser buscado</param>
+            <returns>Objeto achado</returns>
+        </member>
+        <member name="M:NetPOC.Backend.API.Controllers.CrudControllerBase`1.Insert(`0)">
+            <summary>
+            Insere um objeto
+            </summary>
+            <param name="obj">Objeto a ser inserido</param>
+            <returns><see cref="T:Microsoft.AspNetCore.Mvc.ActionResult"/> da operação</returns>
+        </member>
+        <member name="M:NetPOC.Backend.API.Controllers.CrudControllerBase`1.Update(`0)">
+            <summary>
+            Atualiza objeto
+            </summary>
+            <param name="obj">Objeto a ser atualizado</param>
+            <returns><see cref="T:Microsoft.AspNetCore.Mvc.ActionResult"/> da operação</returns>
+        </member>
+        <member name="M:NetPOC.Backend.API.Controllers.CrudControllerBase`1.Delete(System.Int32)">
+            <summary>
+            Apaga objeto de acordo com o ID fornecido
+            </summary>
+            <param name="id">ID do objeto a ser apagado</param>
+            <returns><see cref="T:Microsoft.AspNetCore.Mvc.ActionResult"/> da operação</returns>
+        </member>
+    </members>
+</doc>

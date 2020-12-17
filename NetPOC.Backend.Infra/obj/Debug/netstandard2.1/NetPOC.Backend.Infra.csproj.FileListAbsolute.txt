@@ -1,0 +1,14 @@
+C:\Users\Henrique_0\Documents\Projects\NetPOC\NetPOC.Backend\NetPOC.Backend.Infra\bin\Debug\netstandard2.1\NetPOC.Backend.Infra.deps.json
+C:\Users\Henrique_0\Documents\Projects\NetPOC\NetPOC.Backend\NetPOC.Backend.Infra\bin\Debug\netstandard2.1\NetPOC.Backend.Infra.dll
+C:\Users\Henrique_0\Documents\Projects\NetPOC\NetPOC.Backend\NetPOC.Backend.Infra\bin\Debug\netstandard2.1\NetPOC.Backend.Infra.pdb
+C:\Users\Henrique_0\Documents\Projects\NetPOC\NetPOC.Backend\NetPOC.Backend.Infra\obj\Debug\netstandard2.1\NetPOC.Backend.Infra.csprojAssemblyReference.cache
+C:\Users\Henrique_0\Documents\Projects\NetPOC\NetPOC.Backend\NetPOC.Backend.Infra\obj\Debug\netstandard2.1\NetPOC.Backend.Infra.AssemblyInfoInputs.cache
+C:\Users\Henrique_0\Documents\Projects\NetPOC\NetPOC.Backend\NetPOC.Backend.Infra\obj\Debug\netstandard2.1\NetPOC.Backend.Infra.AssemblyInfo.cs
+C:\Users\Henrique_0\Documents\Projects\NetPOC\NetPOC.Backend\NetPOC.Backend.Infra\obj\Debug\netstandard2.1\NetPOC.Backend.Infra.csproj.CoreCompileInputs.cache
+C:\Users\Henrique_0\Documents\Projects\NetPOC\NetPOC.Backend\NetPOC.Backend.Infra\obj\Debug\netstandard2.1\NetPOC.Backend.Infra.dll
+C:\Users\Henrique_0\Documents\Projects\NetPOC\NetPOC.Backend\NetPOC.Backend.Infra\obj\Debug\netstandard2.1\NetPOC.Backend.Infra.pdb
+C:\Users\Henrique_0\Documents\Projects\NetPOC\NetPOC.Backend\NetPOC.Backend.Infra\bin\Debug\netstandard2.1\NetPOC.Backend.Domain.dll
+C:\Users\Henrique_0\Documents\Projects\NetPOC\NetPOC.Backend\NetPOC.Backend.Infra\bin\Debug\netstandard2.1\NetPOC.Backend.Domain.pdb
+C:\Users\Henrique_0\Documents\Projects\NetPOC\NetPOC.Backend\NetPOC.Backend.Infra\obj\Debug\netstandard2.1\NetPOC.Backend.Infra.csproj.CopyComplete
+C:\Users\Henrique_0\Documents\Projects\NetPOC\NetPOC.Backend\NetPOC.Backend.Infra\bin\Debug\netstandard2.1\NetPOC.Backend.Application.dll
+C:\Users\Henrique_0\Documents\Projects\NetPOC\NetPOC.Backend\NetPOC.Backend.Infra\bin\Debug\netstandard2.1\NetPOC.Backend.Application.pdb
