@@ -5,7 +5,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using NetPOC.Backend.Domain.Interfaces.IServices;
 
-namespace NetPOC.Backend.API.Controllers
+namespace NetPOC.Backend.API.Controllers.v1
 {
     [ApiVersion("1.0")]
     [ApiController]
