@@ -4,6 +4,8 @@ using System.Threading.Tasks;
 using Microsoft.Extensions.Logging;
 using Moq;
 using NetPOC.Backend.Application.Services;
+using NetPOC.Backend.Domain.Dto;
+using NetPOC.Backend.Domain.Entities;
 using NetPOC.Backend.Domain.Interfaces.IRepositories;
 using Xunit;
 
@@ -34,6 +36,22 @@ namespace NetPOC.Backend.Test.Services
             
             // Assert
             Assert.Null(result);
+        }
+
+        [Fact]
+        public async Task SelectPaginated()
+        {
+            // Arrange
+            var logFilter = new LogFilterDto();
+            _logRepository.Setup(a => a.SelectPaginated(logFilter, 0, 0))
+                .ReturnsAsync(new SelectPaginatedResponse<LogEntity>());
+            
+            // Act
+            var service = new LogService(_logger.Object, _logRepository.Object);
+            var result = await service.SelectPaginated(logFilter, 0, 0);
+            
+            // Assert
+            Assert.NotNull(result);
         }
     }
 }
