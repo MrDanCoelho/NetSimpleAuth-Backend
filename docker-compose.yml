@@ -1,0 +1,30 @@
+﻿version: '3.7'
+services:
+  api:
+    depends_on:
+      - database
+    container_name: NetSimpleAuth
+    image: 'net-simple-auth'
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - "5000:5000"
+    networks:
+      - aspnetcoreapp-network
+  database:
+    container_name: PostgresDB
+    image: postgres:latest
+    ports:
+        - '5432:5432'
+    expose:
+        - "5432"
+    environment:
+      - POSTGRES_USER=postgres 
+      - POSTGRES_PASSWORD=password
+    networks:
+      - aspnetcoreapp-network
+      
+networks:
+  aspnetcoreapp-network:
+    driver: bridge

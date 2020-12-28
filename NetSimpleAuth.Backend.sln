@@ -1,0 +1,55 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "1 - Presentation", "1 - Presentation", "{10B88093-4DD3-4541-96FE-7C8924022751}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "2 - Core", "2 - Core", "{2182CC42-0ED2-47D9-9208-473269832D21}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "3 - Infra", "3 - Infra", "{A9CB791F-31E7-4C43-B220-258BCECFB1F7}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "4 - Test", "4 - Test", "{5ED706E8-695D-4585-9867-0F36587B9991}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NetSimpleAuth.Backend.Application", "NetSimpleAuth.Backend.Application\NetSimpleAuth.Backend.Application.csproj", "{B7FD55A4-26CF-41F2-A53C-734860D7B0EA}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NetSimpleAuth.Backend.Domain", "NetSimpleAuth.Backend.Domain\NetSimpleAuth.Backend.Domain.csproj", "{411DBDA7-1E0C-465F-AAB5-B24B45D40269}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NetSimpleAuth.Backend.Infra", "NetSimpleAuth.Backend.Infra\NetSimpleAuth.Backend.Infra.csproj", "{883E2AFC-EEBC-4076-97A9-F74CBFACCAE1}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NetSimpleAuth.Backend.Test", "NetSimpleAuth.Backend.Test\NetSimpleAuth.Backend.Test.csproj", "{0622A6D8-C9A6-4DAE-A3E1-ABB9EA0AC736}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NetSimpleAuth.Backend.API", "NetSimpleAuth.Backend.API\NetSimpleAuth.Backend.API.csproj", "{84E969E0-0657-4E1A-9E38-AC596ACADD3C}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{B7FD55A4-26CF-41F2-A53C-734860D7B0EA} = {2182CC42-0ED2-47D9-9208-473269832D21}
+		{411DBDA7-1E0C-465F-AAB5-B24B45D40269} = {2182CC42-0ED2-47D9-9208-473269832D21}
+		{883E2AFC-EEBC-4076-97A9-F74CBFACCAE1} = {A9CB791F-31E7-4C43-B220-258BCECFB1F7}
+		{0622A6D8-C9A6-4DAE-A3E1-ABB9EA0AC736} = {5ED706E8-695D-4585-9867-0F36587B9991}
+		{84E969E0-0657-4E1A-9E38-AC596ACADD3C} = {10B88093-4DD3-4541-96FE-7C8924022751}
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{B7FD55A4-26CF-41F2-A53C-734860D7B0EA}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B7FD55A4-26CF-41F2-A53C-734860D7B0EA}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B7FD55A4-26CF-41F2-A53C-734860D7B0EA}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B7FD55A4-26CF-41F2-A53C-734860D7B0EA}.Release|Any CPU.Build.0 = Release|Any CPU
+		{411DBDA7-1E0C-465F-AAB5-B24B45D40269}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{411DBDA7-1E0C-465F-AAB5-B24B45D40269}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{411DBDA7-1E0C-465F-AAB5-B24B45D40269}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{411DBDA7-1E0C-465F-AAB5-B24B45D40269}.Release|Any CPU.Build.0 = Release|Any CPU
+		{883E2AFC-EEBC-4076-97A9-F74CBFACCAE1}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{883E2AFC-EEBC-4076-97A9-F74CBFACCAE1}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{883E2AFC-EEBC-4076-97A9-F74CBFACCAE1}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{883E2AFC-EEBC-4076-97A9-F74CBFACCAE1}.Release|Any CPU.Build.0 = Release|Any CPU
+		{0622A6D8-C9A6-4DAE-A3E1-ABB9EA0AC736}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{0622A6D8-C9A6-4DAE-A3E1-ABB9EA0AC736}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{0622A6D8-C9A6-4DAE-A3E1-ABB9EA0AC736}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{0622A6D8-C9A6-4DAE-A3E1-ABB9EA0AC736}.Release|Any CPU.Build.0 = Release|Any CPU
+		{84E969E0-0657-4E1A-9E38-AC596ACADD3C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{84E969E0-0657-4E1A-9E38-AC596ACADD3C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{84E969E0-0657-4E1A-9E38-AC596ACADD3C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{84E969E0-0657-4E1A-9E38-AC596ACADD3C}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+EndGlobal

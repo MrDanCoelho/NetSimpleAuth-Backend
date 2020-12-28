@@ -1,0 +1,33 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+    <PropertyGroup>
+        <TargetFramework>netstandard2.1</TargetFramework>
+    </PropertyGroup>
+
+    <ItemGroup>
+      <PackageReference Include="Dapper" Version="2.0.78" />
+      <PackageReference Include="Dapper.FluentMap" Version="2.0.0" />
+      <PackageReference Include="Dapper.FluentMap.Dommel" Version="2.0.0" />
+      <PackageReference Include="FluentMigrator" Version="3.2.10" />
+      <PackageReference Include="FluentMigrator.Runner" Version="3.2.10" />
+      <PackageReference Include="FluentMigrator.Runner.Postgres" Version="3.2.10" />
+      <PackageReference Include="Microsoft.AspNetCore.Authentication" Version="2.2.0" />
+      <PackageReference Include="Microsoft.Extensions.Caching.StackExchangeRedis" Version="5.0.1" />
+      <PackageReference Include="Microsoft.Extensions.Options.ConfigurationExtensions" Version="5.0.0" />
+      <PackageReference Include="Moq.Dapper" Version="1.0.3" />
+      <PackageReference Include="Npgsql" Version="5.0.1.1" />
+      <PackageReference Include="Serilog" Version="2.10.0" />
+      <PackageReference Include="Serilog.Extensions.Logging" Version="3.0.1" />
+      <PackageReference Include="Serilog.Sinks.Console" Version="3.1.1" />
+      <PackageReference Include="StackExchange.Redis" Version="2.2.4" />
+      <PackageReference Include="Swashbuckle.AspNetCore.Swagger" Version="5.6.3" />
+      <PackageReference Include="Swashbuckle.AspNetCore.SwaggerGen" Version="5.6.3" />
+      <PackageReference Include="Swashbuckle.AspNetCore.SwaggerUI" Version="5.6.3" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <ProjectReference Include="..\NetSimpleAuth.Backend.Application\NetSimpleAuth.Backend.Application.csproj" />
+      <ProjectReference Include="..\NetSimpleAuth.Backend.Domain\NetSimpleAuth.Backend.Domain.csproj" />
+    </ItemGroup>
+
+</Project>

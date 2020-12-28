@@ -1,0 +1,32 @@
+<Project Sdk="Microsoft.NET.Sdk.Web">
+
+    <PropertyGroup>
+        <TargetFramework>netcoreapp3.1</TargetFramework>
+        <UserSecretsId>aspnet-NetPOC.Backend.API-261742A9-E7C6-47B9-98DB-EEF2DABF67A8</UserSecretsId>
+    </PropertyGroup>
+
+    <PropertyGroup Condition=" '$(Configuration)' == 'Debug' ">
+      <DocumentationFile>bin\Debug\netcoreapp3.1\NetSimpleAuth.Backend.API.xml</DocumentationFile>
+    </PropertyGroup>
+
+    <PropertyGroup Condition=" '$(Configuration)' == 'Release' ">
+      <DocumentationFile>bin\Release\netcoreapp3.1\NetSimpleAuth.Backend.API.xml</DocumentationFile>
+    </PropertyGroup>
+
+    <ItemGroup>
+        <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="3.1.10" />
+        <PackageReference Include="Microsoft.AspNetCore.Mvc.Versioning" Version="4.2.0" />
+        <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="5.0.1">
+          <PrivateAssets>all</PrivateAssets>
+          <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+        </PackageReference>
+        <PackageReference Include="Microsoft.Identity.Web" Version="1.1.0" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <ProjectReference Include="..\NetSimpleAuth.Backend.Application\NetSimpleAuth.Backend.Application.csproj" />
+      <ProjectReference Include="..\NetSimpleAuth.Backend.Domain\NetSimpleAuth.Backend.Domain.csproj" />
+      <ProjectReference Include="..\NetSimpleAuth.Backend.Infra\NetSimpleAuth.Backend.Infra.csproj" />
+    </ItemGroup>
+
+</Project>
