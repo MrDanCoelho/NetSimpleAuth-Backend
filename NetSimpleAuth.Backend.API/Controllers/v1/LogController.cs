@@ -7,17 +7,20 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
-using NetPOC.Backend.Domain.Dto;
-using NetPOC.Backend.Domain.Entities;
-using NetPOC.Backend.Domain.Interfaces.IServices;
 using NetSimpleAuth.Backend.API.CustomValidation;
+using NetSimpleAuth.Backend.Domain.Dto;
+using NetSimpleAuth.Backend.Domain.Entities;
+using NetSimpleAuth.Backend.Domain.Interfaces.IServices;
+
+// ReSharper disable RouteTemplates.ControllerRouteParameterIsNotPassedToMethods
+// ReSharper disable RouteTemplates.MethodMissingRouteParameters
 
 namespace NetSimpleAuth.Backend.API.Controllers.v1
 {
     /// <summary>
-    /// 
+    /// Controller for Log requests
     /// </summary>
-    [Authorize]
+    //[Authorize]
     [ApiVersion("1.0")]
     [ApiController]
     [Route("api/v{version:apiVersion}/[controller]")]
@@ -27,10 +30,10 @@ namespace NetSimpleAuth.Backend.API.Controllers.v1
         private readonly ILogService _logService;
         
         /// <summary>
-        /// 
+        /// Controller for Log requests
         /// </summary>
-        /// <param name="logger"></param>
-        /// <param name="logService"></param>
+        /// <param name="logger">The app's logger</param>
+        /// <param name="logService">Service with Log methods</param>
         public LogController(ILogger<LogController> logger, ILogService logService)
             : base(logger, logService)
         {
@@ -52,20 +55,16 @@ namespace NetSimpleAuth.Backend.API.Controllers.v1
         {
             try
             {
-                _logger.LogInformation($"Begin - {nameof(InsertBatch)}");
-
                 using (var file = new StreamReader(logFile.OpenReadStream()))
                 {
                     await _logService.InsertBatch(file);
                 }
 
-                _logger.LogInformation($"End - {nameof(InsertBatch)}");
-                
                 return Ok("Batch inserted successfully");
             }
             catch (Exception e)
             {
-                _logger.LogError($"{nameof(InsertBatch)}: {e}");
+                _logger.LogError(e, "Batch insertion failed");
                 
                 return BadRequest("Unable to read data. Check if file has the right format. If the problem persists, contact the administrator");
             }
@@ -78,23 +77,21 @@ namespace NetSimpleAuth.Backend.API.Controllers.v1
         /// <param name="page">The current page</param>
         /// <param name="pageSize">The page size</param>
         /// <returns>The list of objects paginated</returns>
-        [HttpPost("{page}/{pageSize}")]
+        [HttpPost("{page:int}/{pageSize:int}")]
         public async Task<ActionResult<IEnumerable<LogEntity>>> SelectPaginated([FromBody]LogFilterDto filter, int page, int pageSize)
         {
             try
             {
-                _logger.LogInformation($"Begin - {nameof(SelectPaginated)}");
-
                 var result = await _logService.SelectPaginated(filter, page, pageSize);
                 
-                _logger.LogInformation($"End - {nameof(SelectPaginated)}");
-
                 return Ok(result);
             }
             catch (Exception e)
             {
-                _logger.LogError($"{nameof(SelectPaginated)}: {e}");
-                throw;
+                _logger.LogError(e,
+                    "Log pagination failed for filters={@Filter}, page={$Page} and page size={$PageSize}", filter, page,
+                    pageSize);
+                return BadRequest("Unable to get data. If problem persists, contact an administrator");
             }
         }
     }

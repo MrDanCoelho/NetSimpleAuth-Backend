@@ -1,8 +1,11 @@
 ﻿using System;
 using System.Data;
 
-namespace NetPOC.Backend.Domain.Interfaces.IRepositories
+namespace NetSimpleAuth.Backend.Domain.Interfaces.IRepositories
 {
+    /// <summary>
+    /// Database Unit of Work pattern application
+    /// </summary>
     public interface IUnitOfWork : IDisposable
     {
         IDbConnection DbConnection { get; }

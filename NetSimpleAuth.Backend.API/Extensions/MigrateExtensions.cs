@@ -4,8 +4,16 @@ using Microsoft.Extensions.DependencyInjection;
 
 namespace NetSimpleAuth.Backend.API.Extensions
 {
+    /// <summary>
+    /// Migration Extension helper
+    /// </summary>
     public static class MigrationExtension
     {
+        /// <summary>
+        /// Migrates database on startup
+        /// </summary>
+        /// <param name="app">The current app</param>
+        /// <returns>The application with migrated database</returns>
         public static IApplicationBuilder MigrateDatabase(this IApplicationBuilder app)
         {
             using var scope = app.ApplicationServices.CreateScope();

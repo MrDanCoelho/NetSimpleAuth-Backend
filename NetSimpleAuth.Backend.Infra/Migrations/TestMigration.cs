@@ -1,15 +1,15 @@
 ﻿using FluentMigrator;
-using NetPOC.Backend.Application.Helpers;
+using NetSimpleAuth.Backend.Application.Helpers;
 
-namespace NetPOC.Backend.Infra.Migrations
+namespace NetSimpleAuth.Backend.Infra.Migrations
 {
     [Migration(1)]
     public class TestMigration : Migration
     {
         public override void Up()
         {
-            const string DEFAULT_USER = "admin";
-            const string DEFAULT_PASSWORD = "password";
+            const string defaultUser = "admin";
+            const string defaultPassword = "password";
             
             Create.Table("Log")
                 .WithColumn("Id").AsInt32().PrimaryKey().Identity()
@@ -35,13 +35,13 @@ namespace NetPOC.Backend.Infra.Migrations
                 .WithColumn("PasswordSalt").AsString(100);
 
             var salt = CryptographyService.CreateSalt(64);
-            var password = CryptographyService.HashPassword(DEFAULT_PASSWORD + salt);
+            var password = CryptographyService.HashPassword(defaultPassword + salt);
             
             Insert.IntoTable("User")
                 .Row(new
                 {
                     FirstName = "Dan", LastName = "Coelho", Email = "dancoelho.contact@gmail.com",
-                    UserName = DEFAULT_USER, Password = password,
+                    UserName = defaultUser, Password = password,
                     PasswordSalt = salt
                 });
             

@@ -4,15 +4,15 @@ using System.Linq.Expressions;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Logging;
 using Moq;
-using NetPOC.Backend.Application.Helpers;
-using NetPOC.Backend.Application.Services;
-using NetPOC.Backend.Domain;
-using NetPOC.Backend.Domain.Dto;
-using NetPOC.Backend.Domain.Entities;
-using NetPOC.Backend.Domain.Interfaces.IRepositories;
+using NetSimpleAuth.Backend.Application.Helpers;
+using NetSimpleAuth.Backend.Application.Services;
+using NetSimpleAuth.Backend.Domain;
+using NetSimpleAuth.Backend.Domain.Dto;
+using NetSimpleAuth.Backend.Domain.Entities;
+using NetSimpleAuth.Backend.Domain.Interfaces.IRepositories;
 using Xunit;
 
-namespace NetPOC.Backend.Test.Services
+namespace NetSimpleAuth.Backend.Test.Services
 {
     public class AccountServiceTest
     {
@@ -36,7 +36,7 @@ namespace NetPOC.Backend.Test.Services
             _appSettings.Secret = "atleast32bitsizedsecretstring";
             var authUserDto = new AuthUserDto() { Password = "" };
             var password = CryptographyService.HashPassword("");
-            _userRepository.Setup(x => x.SelectAll(It.IsAny<Expression<Func<UserEntity, bool>>>()))
+            _userRepository.Setup(x => x.Select(It.IsAny<Expression<Func<UserEntity, bool>>>()))
                 .ReturnsAsync(new List<UserEntity> { new UserEntity { UserName = "a", Password = password, PasswordSalt = "" } });
             
             // Act

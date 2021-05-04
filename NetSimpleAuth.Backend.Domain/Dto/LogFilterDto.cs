@@ -1,6 +1,4 @@
-﻿using System;
-
-namespace NetPOC.Backend.Domain.Dto
+﻿namespace NetSimpleAuth.Backend.Domain.Dto
 {
     public class LogFilterDto
     {

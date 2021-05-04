@@ -1,22 +1,28 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Hosting;
-using Microsoft.Extensions.Logging;
 
-namespace NetPOC.Backend.API
+namespace NetSimpleAuth.Backend.API
 {
-    public class Program
+    /// <summary>
+    /// Program startup class
+    /// </summary>
+    public static class Program
     {
+        /// <summary>
+        /// The main program method
+        /// </summary>
+        /// <param name="args">The main program args</param>
         public static void Main(string[] args)
         {
             CreateHostBuilder(args).Build().Run();
         }
 
-        public static IHostBuilder CreateHostBuilder(string[] args) =>
+        /// <summary>
+        /// Host builder creation method
+        /// </summary>
+        /// <param name="args">The program args</param>
+        /// <returns>The host builder</returns>
+        private static IHostBuilder CreateHostBuilder(string[] args) =>
             Host.CreateDefaultBuilder(args)
                 .ConfigureWebHostDefaults(webBuilder => { webBuilder.UseStartup<Startup>(); });
     }

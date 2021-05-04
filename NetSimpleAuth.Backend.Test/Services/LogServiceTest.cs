@@ -3,13 +3,14 @@ using System.Text;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Logging;
 using Moq;
-using NetPOC.Backend.Application.Services;
-using NetPOC.Backend.Domain.Dto;
-using NetPOC.Backend.Domain.Entities;
-using NetPOC.Backend.Domain.Interfaces.IRepositories;
+using NetSimpleAuth.Backend.Application.Services;
+using NetSimpleAuth.Backend.Domain.Dto;
+using NetSimpleAuth.Backend.Domain.Entities;
+using NetSimpleAuth.Backend.Domain.Interfaces.IRepositories;
+using NetSimpleAuth.Backend.Domain.Response;
 using Xunit;
 
-namespace NetPOC.Backend.Test.Services
+namespace NetSimpleAuth.Backend.Test.Services
 {
     public class LogServiceTest
     {

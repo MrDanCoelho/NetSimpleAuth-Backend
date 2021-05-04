@@ -1,7 +1,7 @@
 ﻿using Dapper.FluentMap.Dommel.Mapping;
-using NetPOC.Backend.Domain.Entities;
+using NetSimpleAuth.Backend.Domain.Entities;
 
-namespace NetPOC.Backend.Infra.Maps
+namespace NetSimpleAuth.Backend.Infra.Maps
 {
     public class RefreshTokenMap: DommelEntityMap<RefreshTokenEntity>
     {

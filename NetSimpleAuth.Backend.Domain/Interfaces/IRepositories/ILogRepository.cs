@@ -1,11 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq.Expressions;
-using System.Threading.Tasks;
-using NetPOC.Backend.Domain.Dto;
-using NetPOC.Backend.Domain.Entities;
+﻿using System.Threading.Tasks;
+using NetSimpleAuth.Backend.Domain.Dto;
+using NetSimpleAuth.Backend.Domain.Entities;
+using NetSimpleAuth.Backend.Domain.Response;
 
-namespace NetPOC.Backend.Domain.Interfaces.IRepositories
+namespace NetSimpleAuth.Backend.Domain.Interfaces.IRepositories
 {
     public interface ILogRepository : ICrudRepository<LogEntity>
     {

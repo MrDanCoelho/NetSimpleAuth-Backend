@@ -1,4 +1,4 @@
-﻿namespace NetPOC.Backend.Domain
+﻿namespace NetSimpleAuth.Backend.Domain
 {
     public class AppSettings
     {

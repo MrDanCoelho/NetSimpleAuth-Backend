@@ -1,17 +1,14 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Linq.Expressions;
 using System.Threading.Tasks;
 using Dapper;
-using Dommel;
-using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
-using NetPOC.Backend.Domain.Dto;
-using NetPOC.Backend.Domain.Entities;
-using NetPOC.Backend.Domain.Interfaces.IRepositories;
+using NetSimpleAuth.Backend.Domain.Dto;
+using NetSimpleAuth.Backend.Domain.Entities;
+using NetSimpleAuth.Backend.Domain.Interfaces.IRepositories;
+using NetSimpleAuth.Backend.Domain.Response;
 
-namespace NetPOC.Backend.Infra.Repositories
+namespace NetSimpleAuth.Backend.Infra.Repositories
 {
     /// <inheritdoc cref="ILogRepository" />
     public class LogRepository : CrudRepository<LogEntity>, ILogRepository
@@ -33,47 +30,46 @@ namespace NetPOC.Backend.Infra.Repositories
         
         public async Task<SelectPaginatedResponse<LogEntity>> SelectPaginated(LogFilterDto filter, int pageNumber, int pageSize)
         {
+            var query = "";
+            
             try
             {
-                _logger.LogInformation($"Begin - {nameof(SelectPaginated)}");
-                var sql =
+                query =
                     $@"SELECT *
 	                FROM public.""Log""
 	                WHERE ""Ip"" like '%{filter.Ip}%'
                     AND ""UserAgent"" like '%{filter.UserAgent}%'";
                 
                 if(filter.Hour != null)
-                    sql += $@" AND extract(hour from ""Date"") = {filter.Hour}";
+                    query += $@" AND extract(hour from ""Date"") = {filter.Hour}";
 
                 if (filter.Order != null)
-                    sql += $@" ORDER BY ""{filter.Order}"" {filter.Direction}";
+                    query += $@" ORDER BY ""{filter.Order}"" {filter.Direction}";
                     
-                sql += $@" OFFSET {(pageNumber -1) * pageSize} ROWS
+                query += $@" OFFSET {(pageNumber -1) * pageSize} ROWS
 	                FETCH NEXT {pageSize} ROWS ONLY";
                 
-                var sqlCount =
+                var countQuery =
                     $@"SELECT count(*)
 	                FROM public.""Log""
 	                WHERE ""Ip"" like '%{filter.Ip}%'
                     AND ""UserAgent"" like '%{filter.UserAgent}%'";
                 
                 if(filter.Hour != null)
-                    sqlCount += $@" AND extract(hour from ""Date"") = {filter.Hour}";
+                    countQuery += $@" AND extract(hour from ""Date"") = {filter.Hour}";
 
 
                 var result = new SelectPaginatedResponse<LogEntity>
                 {
-                    obj = await _unitOfWork.DbConnection.QueryAsync<LogEntity>(sql),
-                    count = (await _unitOfWork.DbConnection.QueryAsync<int>(sqlCount)).First()
+                    Obj = await _unitOfWork.DbConnection.QueryAsync<LogEntity>(query),
+                    Count = (await _unitOfWork.DbConnection.QueryAsync<int>(countQuery)).First()
                 };
-
-                _logger.LogInformation($"End - {nameof(SelectPaginated)}");
 
                 return result;
             }
             catch (Exception e)
             {
-                _logger.LogError($"{nameof(SelectPaginated)}: {e}");
+                _logger.LogError(e, "Pagination failed for query = {$Query}", query);
                 throw;
             }
         }

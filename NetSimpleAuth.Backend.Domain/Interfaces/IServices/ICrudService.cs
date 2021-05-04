@@ -1,10 +1,11 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq.Expressions;
+﻿using System.Collections.Generic;
 using System.Threading.Tasks;
 
-namespace NetPOC.Backend.Domain.Interfaces.IServices
+namespace NetSimpleAuth.Backend.Domain.Interfaces.IServices
 {
+    /// <summary>
+    /// Generic CRUD service
+    /// </summary>
     public interface ICrudService<T> where T : class
     {
         /// <summary>

@@ -1,7 +1,7 @@
 ﻿using System;
 using System.ComponentModel.DataAnnotations;
 
-namespace NetPOC.Backend.Domain.Entities
+namespace NetSimpleAuth.Backend.Domain.Entities
 {
     public class RefreshTokenEntity
     {

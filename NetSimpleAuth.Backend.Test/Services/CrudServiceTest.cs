@@ -2,12 +2,12 @@
 using System.Threading.Tasks;
 using Microsoft.Extensions.Logging;
 using Moq;
-using NetPOC.Backend.Application.Services;
-using NetPOC.Backend.Domain.Entities;
-using NetPOC.Backend.Domain.Interfaces.IRepositories;
+using NetSimpleAuth.Backend.Application.Services;
+using NetSimpleAuth.Backend.Domain.Entities;
+using NetSimpleAuth.Backend.Domain.Interfaces.IRepositories;
 using Xunit;
 
-namespace NetPOC.Backend.Test.Services
+namespace NetSimpleAuth.Backend.Test.Services
 {
     public class CrudServiceTest
     {
@@ -51,30 +51,15 @@ namespace NetPOC.Backend.Test.Services
         }
         
         [Fact]
-        public async Task SelectFirst()
+        public async Task Select()
         {
             // Arrange
-            _crudRepository.Setup(x => x.SelectFirst(a => a.Id == 1))
-                .Returns(Task.FromResult(new LogEntity()));
-            
-            // Act
-            var service = new LogService(_logger.Object, _crudRepository.Object);
-            var result = await service.SelectFirst(a => a.Id == 1);
-            
-            // Assert
-            Assert.NotNull(result);
-        }
-        
-        [Fact]
-        public async Task SelectAll()
-        {
-            // Arrange
-            _crudRepository.Setup(x => x.SelectAll(a => a.Id == 1))
+            _crudRepository.Setup(x => x.Select(a => a.Id == 1))
                 .Returns(Task.FromResult<IEnumerable<LogEntity>>(new List<LogEntity>()));
             
             // Act
             var service = new LogService(_logger.Object, _crudRepository.Object);
-            var result = await service.SelectAll(a => a.Id == 1);
+            var result = await service.Select(a => a.Id == 1);
             
             // Assert
             Assert.NotNull(result);

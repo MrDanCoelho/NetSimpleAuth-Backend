@@ -2,9 +2,9 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using Moq;
-using NetPOC.Backend.Domain.Dto;
-using NetPOC.Backend.Domain.Interfaces.IServices;
 using NetSimpleAuth.Backend.API.Controllers.v1;
+using NetSimpleAuth.Backend.Domain.Dto;
+using NetSimpleAuth.Backend.Domain.Interfaces.IServices;
 using Xunit;
 
 namespace NetPOC.Backend.Test.Controllers

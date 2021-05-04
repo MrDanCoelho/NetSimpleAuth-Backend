@@ -1,13 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Linq.Expressions;
 using System.Threading.Tasks;
 using Dommel;
 using Microsoft.Extensions.Logging;
-using NetPOC.Backend.Domain.Interfaces.IRepositories;
+using NetSimpleAuth.Backend.Domain.Interfaces.IRepositories;
 
-namespace NetPOC.Backend.Infra.Repositories
+namespace NetSimpleAuth.Backend.Infra.Repositories
 {
     /// <inheritdoc/>
     public abstract class CrudRepository<T> : ICrudRepository<T> where T : class
@@ -18,10 +17,7 @@ namespace NetPOC.Backend.Infra.Repositories
         /// <summary>
         /// Generic CRUD repository
         /// </summary>
-        /// <param name="logger"><see>
-        ///         <cref>ILogger{CrudRepository{T}}</cref>
-        ///     </see>
-        ///     logger</param>
+        /// <param name="logger">The logger for the repository</param>
         /// <param name="unitOfWork">Repository's Unit of Work</param>
         protected CrudRepository(ILogger<CrudRepository<T>> logger, IUnitOfWork unitOfWork)
         {
@@ -33,17 +29,13 @@ namespace NetPOC.Backend.Infra.Repositories
         {
             try
             {
-                _logger.LogInformation($"Begin - {nameof(GetAll)} ({nameof(T)})");
-                
                 var result = await _unitOfWork.DbConnection.GetAllAsync<T>();
-
-                _logger.LogInformation($"End - {nameof(GetAll)} ({nameof(T)})");
 
                 return result;
             }
             catch (Exception e)
             {
-                _logger.LogError($"{nameof(GetAll)} ({nameof(T)}): {e}");
+                _logger.LogError(e, "{Method} failed for type {T}", nameof(GetAll), typeof(T));
                 throw;
             }
         }
@@ -52,55 +44,28 @@ namespace NetPOC.Backend.Infra.Repositories
         {
             try
             {
-                _logger.LogInformation($"Begin - {nameof(GetById)} ({nameof(T)})");
-                
                 var result = await _unitOfWork.DbConnection.GetAsync<T>(id);
                 
-                _logger.LogInformation($"End - {nameof(GetById)} ({nameof(T)})");
-
                 return result;
             }
             catch (Exception e)
             {
-                _logger.LogError($"{nameof(GetById)} ({nameof(T)}): {e}");
+                _logger.LogError(e, "{Method} failed for type {T}", nameof(GetById), typeof(T));
                 throw;
             }
         }
         
-        public async Task<T> SelectFirst(Expression<Func<T, bool>> predicate)
+        public async Task<IEnumerable<T>> Select(Expression<Func<T, bool>> predicate)
         {
             try
             {
-                _logger.LogInformation($"Begin - {nameof(SelectFirst)} ({nameof(T)})");
-                
                 var result = await _unitOfWork.DbConnection.SelectAsync(predicate);
                 
-                _logger.LogInformation($"End - {nameof(SelectFirst)} ({nameof(T)})");
-
-                return result.FirstOrDefault();
-            }
-            catch (Exception e)
-            {
-                _logger.LogError($"{nameof(SelectFirst)} ({nameof(T)}): {e}");
-                throw;
-            }
-        }
-        
-        public async Task<IEnumerable<T>> SelectAll(Expression<Func<T, bool>> predicate)
-        {
-            try
-            {
-                _logger.LogInformation($"Begin - {nameof(SelectAll)} ({nameof(T)})");
-                
-                var result = await _unitOfWork.DbConnection.SelectAsync(predicate);
-                
-                _logger.LogInformation($"End - {nameof(SelectAll)} ({nameof(T)})");
-
                 return result;
             }
             catch (Exception e)
             {
-                _logger.LogError($"{nameof(SelectAll)} ({nameof(T)}): {e}");
+                _logger.LogError(e, "{Method} failed for type {T} and predicate = {@Predicate}", nameof(Select), typeof(T), predicate);
                 throw;
             }
         }
@@ -109,16 +74,12 @@ namespace NetPOC.Backend.Infra.Repositories
         {
             try
             {
-                _logger.LogInformation($"Begin - {nameof(Insert)} ({nameof(T)})");
-                
                 _unitOfWork.Begin();
                 await _unitOfWork.DbConnection.InsertAsync(obj, _unitOfWork.DbTransaction);
-                
-                _logger.LogInformation($"End - {nameof(Insert)} ({nameof(T)})");
             }
             catch (Exception e)
             {
-                _logger.LogError($"{nameof(Insert)} ({nameof(T)}): {e}");
+                _logger.LogError(e, "{Method} failed for type {T} and object = {@Obj}", nameof(Insert), typeof(T), obj);
                 throw;
             }
         }
@@ -127,16 +88,13 @@ namespace NetPOC.Backend.Infra.Repositories
         {
             try
             {
-                _logger.LogInformation($"Begin - {nameof(Insert)} ({nameof(T)})");
-                
                 _unitOfWork.Begin();
                 await _unitOfWork.DbConnection.InsertAllAsync(objList, _unitOfWork.DbTransaction);
-                
-                _logger.LogInformation($"End - {nameof(Insert)} ({nameof(T)})");
             }
             catch (Exception e)
             {
-                _logger.LogError($"{nameof(Insert)} ({nameof(T)}): {e}");
+                _logger.LogError(e, "{Method} failed for type {T} and object list = {@ObjList}", nameof(InsertAll),
+                    typeof(T), objList);
                 throw;
             }
         }
@@ -145,16 +103,12 @@ namespace NetPOC.Backend.Infra.Repositories
         {
             try
             {
-                _logger.LogInformation($"Begin - {nameof(Update)} ({nameof(T)})");
-                
                 _unitOfWork.Begin();
                 await _unitOfWork.DbConnection.UpdateAsync(obj, _unitOfWork.DbTransaction);
-                
-                _logger.LogInformation($"End - {nameof(Update)} ({nameof(T)})");
             }
             catch (Exception e)
             {
-                _logger.LogError($"{nameof(Update)} ({nameof(T)}): {e}");
+                _logger.LogError(e, "{Method} failed for type {T} and object = {@Obj}", nameof(Update), typeof(T), obj);
                 throw;
             }
         }
@@ -163,16 +117,12 @@ namespace NetPOC.Backend.Infra.Repositories
         {
             try
             {
-                _logger.LogInformation($"Begin - {nameof(Delete)} ({nameof(T)})");
-                
                 _unitOfWork.Begin();
                 await _unitOfWork.DbConnection.DeleteAsync(obj, _unitOfWork.DbTransaction);
-                
-                _logger.LogInformation($"End - {nameof(Delete)} ({nameof(T)})");
             }
             catch (Exception e)
             {
-                _logger.LogError($"{nameof(Delete)} ({nameof(T)}): {e}");
+                _logger.LogError(e, "{Method} failed for type {T} and object = {@Obj}", nameof(Delete), typeof(T), obj);
                 throw;
             }
         }
@@ -181,15 +131,11 @@ namespace NetPOC.Backend.Infra.Repositories
         {
             try
             {
-                _logger.LogInformation($"Begin - {nameof(Save)} ({nameof(T)})");
-                
                 _unitOfWork.Commit();
-                
-                _logger.LogInformation($"End - {nameof(Save)} ({nameof(T)})");
             }
             catch (Exception e)
             {
-                _logger.LogError($"{nameof(Save)} ({nameof(T)}): {e}");
+                _logger.LogError(e, "{Method} failed for type {T}", nameof(Save), typeof(T));
                 throw;
             }
         }

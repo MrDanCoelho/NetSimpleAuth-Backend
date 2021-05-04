@@ -2,16 +2,16 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using System.Linq.Expressions;
 using System.Net;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Logging;
-using NetPOC.Backend.Domain.Dto;
-using NetPOC.Backend.Domain.Entities;
-using NetPOC.Backend.Domain.Interfaces.IRepositories;
-using NetPOC.Backend.Domain.Interfaces.IServices;
+using NetSimpleAuth.Backend.Domain.Dto;
+using NetSimpleAuth.Backend.Domain.Entities;
+using NetSimpleAuth.Backend.Domain.Interfaces.IRepositories;
+using NetSimpleAuth.Backend.Domain.Interfaces.IServices;
+using NetSimpleAuth.Backend.Domain.Response;
 
-namespace NetPOC.Backend.Application.Services
+namespace NetSimpleAuth.Backend.Application.Services
 {
     /// <inheritdoc cref="ILogService" />
     public class LogService : CrudService<LogEntity>, ILogService
@@ -30,14 +30,13 @@ namespace NetPOC.Backend.Application.Services
         {
             try
             {
-                _logger.LogInformation($"Begin - {nameof(InsertBatch)}");
-
                 string line;
 
                 var logList = new List<LogEntity>();
                 while ((line = await file.ReadLineAsync()) != null)
                 {
-                    _logger.LogInformation(line);
+                    _logger.LogDebug("Current line: {$Line}", line);
+                    
                     var values = line.Split(null).Select(a => a == "-"? null : a).ToArray();
                     
                     Enum.TryParse(values[8], out HttpStatusCode parsedStatusCode);
@@ -77,12 +76,10 @@ namespace NetPOC.Backend.Application.Services
                 
                 await _logRepository.InsertAll(logList);
                 _logRepository.Save();
-
-                _logger.LogInformation($"End - {nameof(InsertBatch)}");
             }
             catch (Exception e)
             {
-                _logger.LogError($"{nameof(InsertBatch)}: {e}");
+                _logger.LogError(e, "Error during batch insertion");
                 throw;
             }
         }
@@ -91,17 +88,15 @@ namespace NetPOC.Backend.Application.Services
         {
             try
             {
-                _logger.LogInformation($"Begin - {nameof(SelectPaginated)}");
-                
                 var result = await _logRepository.SelectPaginated(filter, pageNumber, pageSize);
                 
-                _logger.LogInformation($"End - {nameof(SelectPaginated)}");
-
                 return result;
             }
             catch (Exception e)
             {
-                _logger.LogError($"{nameof(SelectPaginated)}: {e}");
+                _logger.LogError(e,
+                    "Pagination failed for filter = {@Filter}, page number = {$PageNumber} and page size = {$PageSize}",
+                    filter, pageNumber, pageSize);
                 throw;
             }
         }

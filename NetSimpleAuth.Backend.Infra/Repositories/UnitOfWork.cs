@@ -1,13 +1,12 @@
-﻿using System;
-using System.Data;
-using NetPOC.Backend.Domain.Interfaces.IRepositories;
+﻿using System.Data;
+using NetSimpleAuth.Backend.Domain.Interfaces.IRepositories;
 
-namespace NetPOC.Backend.Infra.Repositories
+namespace NetSimpleAuth.Backend.Infra.Repositories
 {
     public class UnitOfWork : IUnitOfWork
     {
         private readonly IDbConnection _dbConnection;
-        private IDbTransaction _dbTransaction = null;
+        private IDbTransaction _dbTransaction;
 
         public UnitOfWork(IDbConnection dbConnection)
         {

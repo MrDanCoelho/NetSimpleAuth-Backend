@@ -2,7 +2,7 @@
 using System.ComponentModel.DataAnnotations;
 using System.Net;
 
-namespace NetPOC.Backend.Domain.Entities
+namespace NetSimpleAuth.Backend.Domain.Entities
 {
     public class LogEntity
     {

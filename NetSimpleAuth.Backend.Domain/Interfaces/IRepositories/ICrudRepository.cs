@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq.Expressions;
 using System.Threading.Tasks;
 
-namespace NetPOC.Backend.Domain.Interfaces.IRepositories
+namespace NetSimpleAuth.Backend.Domain.Interfaces.IRepositories
 {
     public interface ICrudRepository<T> where T : class
     {
@@ -21,18 +21,11 @@ namespace NetPOC.Backend.Domain.Interfaces.IRepositories
         Task<T> GetById(object id);
         
         /// <summary>
-        /// Repository service to search single object according to an expression
-        /// </summary>
-        /// <param name="predicate">The predicate of the object to be searched</param>
-        /// <returns>The object that matches the predicate supplied or null if not found</returns>
-        Task<T> SelectFirst(Expression<Func<T, bool>> predicate);
-        
-        /// <summary>
         /// Repository service to search for a list of objects according to an expression
         /// </summary>
         /// <param name="predicate">The predicate of the objects to be searched</param>
-        /// <returns>A list of objects that matches the predicate supplied or null if not found</returns>
-        Task<IEnumerable<T>> SelectAll(Expression<Func<T, bool>> predicate);
+        /// <returns>A IEnumerable that matches the predicate supplied or null if not found</returns>
+        Task<IEnumerable<T>> Select(Expression<Func<T, bool>> predicate);
 
         /// <summary>
         /// Repository service to insert an object in the repository

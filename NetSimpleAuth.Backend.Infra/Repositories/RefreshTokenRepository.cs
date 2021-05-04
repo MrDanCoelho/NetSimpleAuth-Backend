@@ -1,8 +1,8 @@
 ﻿using Microsoft.Extensions.Logging;
-using NetPOC.Backend.Domain.Entities;
-using NetPOC.Backend.Domain.Interfaces.IRepositories;
+using NetSimpleAuth.Backend.Domain.Entities;
+using NetSimpleAuth.Backend.Domain.Interfaces.IRepositories;
 
-namespace NetPOC.Backend.Infra.Repositories
+namespace NetSimpleAuth.Backend.Infra.Repositories
 {
     public class RefreshTokenRepository : CrudRepository<RefreshTokenEntity>, IRefreshTokenRepository
     {

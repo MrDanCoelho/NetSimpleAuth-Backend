@@ -1,6 +1,6 @@
-﻿using NetPOC.Backend.Domain.Entities;
+﻿using NetSimpleAuth.Backend.Domain.Entities;
 
-namespace NetPOC.Backend.Domain.Interfaces.IRepositories
+namespace NetSimpleAuth.Backend.Domain.Interfaces.IRepositories
 {
     public interface IUserRepository : ICrudRepository<UserEntity>
     {

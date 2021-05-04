@@ -8,14 +8,15 @@ using System.Text;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Logging;
 using Microsoft.IdentityModel.Tokens;
-using NetPOC.Backend.Application.Helpers;
-using NetPOC.Backend.Domain;
-using NetPOC.Backend.Domain.Dto;
-using NetPOC.Backend.Domain.Entities;
-using NetPOC.Backend.Domain.Interfaces.IRepositories;
-using NetPOC.Backend.Domain.Interfaces.IServices;
+using NetSimpleAuth.Backend.Application.Helpers;
+using NetSimpleAuth.Backend.Domain;
+using NetSimpleAuth.Backend.Domain.Dto;
+using NetSimpleAuth.Backend.Domain.Entities;
+using NetSimpleAuth.Backend.Domain.Interfaces.IRepositories;
+using NetSimpleAuth.Backend.Domain.Interfaces.IServices;
+using NetSimpleAuth.Backend.Domain.Response;
 
-namespace NetPOC.Backend.Application.Services
+namespace NetSimpleAuth.Backend.Application.Services
 {
     /// <inheritdoc/>
     public class AccountService : IAccountService
@@ -42,23 +43,28 @@ namespace NetPOC.Backend.Application.Services
         {
             try
             {
-                _logger.LogInformation($"Begin - {nameof(Authenticate)}");
+                _logger.LogDebug("Beginning Authentication");
 
-                var userList =  await _userRepository.SelectAll(a => (a.UserName == authUserDto.Identity || a.Email == authUserDto.Identity));
+                var userList =  await _userRepository.Select(a => a.UserName == authUserDto.Identity || a.Email == authUserDto.Identity);
 
                 var user = userList.FirstOrDefault(a => CryptographyService.HashPassword(authUserDto.Password + a.PasswordSalt) == a.Password);
 
                 if (user == null)
                     throw new AuthenticationException("Invalid user. Check your password and/or username");
 
-                var jwtToken = GenerateJwtToken(user);
-                var refreshToken = GenerateRefreshToken(authUserDto.IpAddress);
+                _logger.LogDebug("User found: {@User}", user);
 
+                var jwtToken = GenerateJwtToken(user);
+                _logger.LogDebug("New token generated: {@JwtToken}", jwtToken);
+
+                var refreshToken = GenerateRefreshToken(authUserDto.IpAddress);
                 refreshToken.UserId = user.Id;
 
                 await _refreshTokenRepository.Insert(refreshToken);
                 _refreshTokenRepository.Save();
                 
+                _logger.LogDebug("New refresh token generated: {@RefreshToken}", refreshToken);
+
                 var authUserResponse = new AuthUserResponse()
                 {
                     Username = user.UserName,
@@ -66,33 +72,40 @@ namespace NetPOC.Backend.Application.Services
                     RefreshToken = refreshToken.Token
                 };
 
-                _logger.LogInformation($"End - {nameof(Authenticate)}");
+                _logger.LogDebug("Authentication successful");
                 
                 return authUserResponse;
             }
             catch (Exception e)
             {
-                _logger.LogError($"{nameof(Authenticate)}: {e}");
+                _logger.LogError(e, "Error during authentication");
                 throw;
             }
         }
         
         private string GenerateJwtToken(UserEntity user)
         {
-            
-            var tokenHandler = new JwtSecurityTokenHandler();
-            var key = Encoding.ASCII.GetBytes(_appSettings.Secret);
-            var tokenDescriptor = new SecurityTokenDescriptor
+            try
             {
-                Subject = new ClaimsIdentity(new[] 
+                var tokenHandler = new JwtSecurityTokenHandler();
+                var key = Encoding.ASCII.GetBytes(_appSettings.Secret);
+                var tokenDescriptor = new SecurityTokenDescriptor
                 {
-                    new Claim(ClaimTypes.Name, user.UserName)
-                }),
-                Expires = DateTime.UtcNow.AddMinutes(15),
-                SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(key), SecurityAlgorithms.HmacSha256Signature)
-            };
-            var token = tokenHandler.CreateToken(tokenDescriptor);
-            return tokenHandler.WriteToken(token);
+                    Subject = new ClaimsIdentity(new[] 
+                    {
+                        new Claim(ClaimTypes.Name, user.UserName)
+                    }),
+                    Expires = DateTime.UtcNow.AddMinutes(15),
+                    SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(key), SecurityAlgorithms.HmacSha256Signature)
+                };
+                var token = tokenHandler.CreateToken(tokenDescriptor);
+                return tokenHandler.WriteToken(token);
+            }
+            catch (Exception e)
+            {
+                _logger.LogError(e, "Unable to generate JWT token for user={@User}", user);
+                throw;
+            }
         }
 
         private RefreshTokenEntity GenerateRefreshToken(string ipAddress)

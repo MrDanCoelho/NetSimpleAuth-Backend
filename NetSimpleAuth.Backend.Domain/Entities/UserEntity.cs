@@ -1,6 +1,4 @@
-﻿using System.Collections.Generic;
-
-namespace NetPOC.Backend.Domain.Entities
+﻿namespace NetSimpleAuth.Backend.Domain.Entities
 {
     public class UserEntity
     {

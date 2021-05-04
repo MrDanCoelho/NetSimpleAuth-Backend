@@ -8,37 +8,35 @@ using Dapper.FluentMap.Dommel;
 using FluentMigrator.Runner;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using Microsoft.OpenApi.Models;
-using NetPOC.Backend.Application.Services;
-using NetPOC.Backend.Domain;
-using NetPOC.Backend.Domain.Interfaces.IRepositories;
-using NetPOC.Backend.Domain.Interfaces.IServices;
-using NetPOC.Backend.Infra.Maps;
-using NetPOC.Backend.Infra.Migrations;
-using NetPOC.Backend.Infra.Repositories;
+using NetSimpleAuth.Backend.Application.Services;
+using NetSimpleAuth.Backend.Domain;
+using NetSimpleAuth.Backend.Domain.Interfaces.IRepositories;
+using NetSimpleAuth.Backend.Domain.Interfaces.IServices;
+using NetSimpleAuth.Backend.Infra.Maps;
+using NetSimpleAuth.Backend.Infra.Migrations;
+using NetSimpleAuth.Backend.Infra.Repositories;
 using Npgsql;
 using Serilog;
-using Serilog.Extensions.Logging;
 using Swashbuckle.AspNetCore.SwaggerGen;
 
-namespace NetPOC.Backend.Infra
+namespace NetSimpleAuth.Backend.Infra
 {
     public static class DependencyInjectionExtension
     {
         /// <summary>
-        /// Helper de configuração de injeção de dependências
+        /// Dependency injection helper method
         /// </summary>
-        /// <param name="services"><see cref="IServiceCollection"/> contendo os serviços da aplicação</param>
-        /// <param name="config"><see cref="IConfiguration"/> da aplicação</param>
+        /// <param name="services">The app's <see cref="IServiceCollection"/></param>
+        /// <param name="config">The app's <see cref="IConfiguration"/></param>
         public static void ConfigureAllServices(this IServiceCollection services, IConfiguration config)
         {
             services.ConfigureSettings(config);
             services.ConfigureRepositories(config);
             services.ConfigureServices();
             services.ConfigureDistributedCache(config);
-            services.ConfigureLogger();
+            services.ConfigureLogger(config);
             services.ConfigureSwagger();
         }
 
@@ -46,8 +44,8 @@ namespace NetPOC.Backend.Infra
         /// <summary>
         /// <see cref="AppSettings"/> configuration Helper
         /// </summary>
-        /// <param name="services"><see cref="IServiceCollection"/> of the application</param>
-        /// <param name="config"><see cref="IConfiguration"/> of the application</param>
+        /// <param name="services">The app's <see cref="IServiceCollection"/></param>
+        /// <param name="config">The app's <see cref="IConfiguration"/></param>
         private static void ConfigureSettings(this IServiceCollection services, IConfiguration config)
         {
             services.Configure<AppSettings>(config);
@@ -56,23 +54,18 @@ namespace NetPOC.Backend.Infra
 
 
         /// <summary>
-        /// Helper de configuração de repositórios da aplicação
+        /// Repository configuration helper
         /// </summary>
-        /// <param name="services"><see cref="IServiceCollection"/> contendo os serviços da aplicação</param>
-        /// <param name="config"></param>
+        /// <param name="services">The app's <see cref="IServiceCollection"/></param>
+        /// <param name="config">The app's <see cref="IConfiguration"/></param>
         private static void ConfigureRepositories(this IServiceCollection services, IConfiguration config)
         {
             services.AddFluentMigratorCore()
                 .ConfigureRunner(rb => rb
-                    // Add SQLite support to FluentMigrator
                     .AddPostgres()
-                    // Set the connection string
                     .WithGlobalConnectionString(config.GetConnectionString("DefaultConnection"))
-                    // Define the assembly containing the migrations
                     .ScanIn(typeof(TestMigration).Assembly).For.Migrations())
-                // Enable logging to console in the FluentMigrator way
                 .AddLogging(lb => lb.AddFluentMigratorConsole())
-                // Build the service provider
                 .BuildServiceProvider(false);
             
             FluentMapper.Initialize(c =>
@@ -93,9 +86,9 @@ namespace NetPOC.Backend.Infra
         }
 
         /// <summary>
-        /// Helper de configuração de serviços da aplicação
+        /// Service configuration helper
         /// </summary>
-        /// <param name="services"><see cref="IServiceCollection"/> contendo os serviços da aplicação</param>
+        /// <param name="services">The app's <see cref="IServiceCollection"/></param>
         private static void ConfigureServices(this IServiceCollection services)
         {
             services.AddScoped<ILogService, LogService>();
@@ -103,10 +96,10 @@ namespace NetPOC.Backend.Infra
         }
 
         /// <summary>
-        /// Helper de configuração de cache distribuído
+        /// Distributed cache helper
         /// </summary>
-        /// <param name="services"><see cref="IServiceCollection"/> contendo os serviços da aplicação</param>
-        /// <param name="config"><see cref="IConfiguration"/> da aplicação</param>
+        /// <param name="services">The app's <see cref="IServiceCollection"/></param>
+        /// <param name="config">The app's <see cref="IConfiguration"/></param>
         private static void ConfigureDistributedCache(this IServiceCollection services, IConfiguration config)
         {
             var connectionString = config.GetSection("ConnectionStrings:DistributedCache").Value;
@@ -119,37 +112,28 @@ namespace NetPOC.Backend.Infra
                 if (assemblyName != null) options.InstanceName = assemblyName.Name;
             });
         }
-        
+
         /// <summary>
-        /// Helper de configuração de logs da applicação
+        /// Logging configuration helper
         /// </summary>
-        /// <param name="services"><see cref="IServiceCollection"/> contendo os serviços da aplicação</param>
-        private static void ConfigureLogger(this IServiceCollection services)
+        /// <param name="services">The app's <see cref="IServiceCollection"/></param>
+        /// <param name="config">The app's <see cref="IConfiguration"/></param>
+        private static void ConfigureLogger(this IServiceCollection services, IConfiguration config)
         {
-            var providers = new LoggerProviderCollection();
-            
-            Log.Logger = new LoggerConfiguration()
-                .MinimumLevel.Debug()
-                .WriteTo.Console()
-                .WriteTo.Providers(providers)
+            var serilogLogger = new LoggerConfiguration()
+                .ReadFrom.Configuration(config)
                 .CreateLogger();
-            
-            services.AddSingleton<ILoggerFactory>(sc =>
+ 
+            services.AddLogging(builder =>
             {
-                var providerCollection = sc.GetService<LoggerProviderCollection>();
-                var factory = new SerilogLoggerFactory(null, true, providerCollection);
-
-                foreach (var provider in sc.GetServices<ILoggerProvider>())
-                    factory.AddProvider(provider);
-
-                return factory;
+                builder.AddSerilog(logger: serilogLogger, dispose: true);
             });
         }
         
         /// <summary>
-        /// Helper de configuração do Swagger
+        /// Swagger configuration helper
         /// </summary>
-        /// <param name="services"><see cref="IServiceCollection"/> contendo os serviços da aplicação</param>
+        /// <param name="services">The app's <see cref="IServiceCollection"/></param>
         private static void ConfigureSwagger(this IServiceCollection services)
         {
             services.AddSwaggerGen(c =>
@@ -207,6 +191,7 @@ namespace NetPOC.Backend.Infra
         }
     }
     
+    // ReSharper disable once ClassNeverInstantiated.Global
     public class RemoveVersionFromParameter : IOperationFilter
     {
         public void Apply(OpenApiOperation operation, OperationFilterContext context)
@@ -216,6 +201,7 @@ namespace NetPOC.Backend.Infra
         }
     }
 
+    // ReSharper disable once ClassNeverInstantiated.Global
     public class ReplaceVersionWithExactValueInPath : IDocumentFilter
     {
         public void Apply(OpenApiDocument swaggerDoc, DocumentFilterContext context)

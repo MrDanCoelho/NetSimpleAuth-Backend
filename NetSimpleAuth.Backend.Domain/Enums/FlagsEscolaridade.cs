@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace NetPOC.Backend.Domain.Enums
+namespace NetSimpleAuth.Backend.Domain.Enums
 {
     [Flags]
     public enum FlagEscolaridade

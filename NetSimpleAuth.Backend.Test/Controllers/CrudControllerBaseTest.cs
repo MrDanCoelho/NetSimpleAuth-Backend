@@ -3,12 +3,12 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using Moq;
-using NetPOC.Backend.Domain.Entities;
-using NetPOC.Backend.Domain.Interfaces.IServices;
 using NetSimpleAuth.Backend.API.Controllers.v1;
+using NetSimpleAuth.Backend.Domain.Entities;
+using NetSimpleAuth.Backend.Domain.Interfaces.IServices;
 using Xunit;
 
-namespace NetPOC.Backend.Test.Controllers
+namespace NetSimpleAuth.Backend.Test.Controllers
 {
     public class CrudControllerBaseTest
     {

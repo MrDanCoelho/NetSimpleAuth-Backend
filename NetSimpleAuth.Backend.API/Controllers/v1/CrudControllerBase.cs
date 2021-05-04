@@ -1,33 +1,30 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq.Expressions;
 using System.Threading.Tasks;
-using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
-using NetPOC.Backend.Domain.Interfaces.IServices;
+using NetSimpleAuth.Backend.Domain.Interfaces.IServices;
+
+// ReSharper disable RouteTemplates.ControllerRouteParameterIsNotPassedToMethods
 
 namespace NetSimpleAuth.Backend.API.Controllers.v1
 {
     /// <summary>
-    /// 
+    /// Base abstract controller with CRUD operations
     /// </summary>
-    /// <typeparam name="T"></typeparam>
-    [Authorize]
-    [ApiVersion("1.0")]
+    /// <typeparam name="T">The type that this CRUD controller will use</typeparam>
     [ApiController]
-    [Route("api/v{version:apiVersion}/[controller]")]
-    public class CrudControllerBase<T> : ControllerBase where T : class
+    public abstract class CrudControllerBase<T> : ControllerBase where T : class
     {
         private readonly ILogger<CrudControllerBase<T>> _logger;
         private readonly ICrudService<T> _crudService;
 
         /// <summary>
-        /// 
+        /// Base abstract controller with CRUD operations
         /// </summary>
-        /// <param name="logger"></param>
-        /// <param name="crudService"></param>
-        public CrudControllerBase(ILogger<CrudControllerBase<T>> logger, ICrudService<T> crudService)
+        /// <param name="logger">The app's logger</param>
+        /// <param name="crudService">Service with CRUD operations</param>
+        protected CrudControllerBase(ILogger<CrudControllerBase<T>> logger, ICrudService<T> crudService)
         {
             _logger = logger;
             _crudService = crudService;
@@ -42,18 +39,14 @@ namespace NetSimpleAuth.Backend.API.Controllers.v1
         {
             try
             {
-                _logger.LogInformation($"Begin - {nameof(GetAll)} ({nameof(T)})");
-
                 var result = await _crudService.GetAll();
                 
-                _logger.LogInformation($"End - {nameof(GetAll)} ({nameof(T)})");
-
                 return Ok(result);
             }
             catch (Exception e)
             {
-                _logger.LogError($"{nameof(GetAll)} ({nameof(T)}): {e}");
-                throw;
+                _logger.LogError(e, "Getting all {T} request failed", typeof(T));
+                return BadRequest("Unable to get object list. If problem persists, contact an administrator");
             }
         }
         
@@ -62,23 +55,19 @@ namespace NetSimpleAuth.Backend.API.Controllers.v1
         /// </summary>
         /// <param name="id">ID of the object to be searched</param>
         /// <returns>Found object</returns>
-        [HttpGet("{id}")]
+        [HttpGet("{id:int}")]
         public async Task<ActionResult<T>> GetById(int id)
         {
             try
             {
-                _logger.LogInformation($"Begin - {nameof(GetById)} ({nameof(T)})");
-
                 var result = await _crudService.GetById(id);
                 
-                _logger.LogInformation($"End - {nameof(GetById)} ({nameof(T)})");
-
                 return Ok(result);
             }
             catch (Exception e)
             {
-                _logger.LogError($"{nameof(GetById)} ({nameof(T)}): {e}");
-                throw;
+                _logger.LogError(e, "Getting {T} with id {$Id} request failed", typeof(T),id);
+                return BadRequest("Unable to get object by id. If problem persists, contact an administrator");
             }
         }
 
@@ -92,18 +81,14 @@ namespace NetSimpleAuth.Backend.API.Controllers.v1
         {
             try
             {
-                _logger.LogInformation($"Begin - {nameof(Insert)} ({nameof(T)})");
-                
                 await _crudService.Insert(obj);
                 
-                _logger.LogInformation($"End - {nameof(Insert)} ({nameof(T)})");
-
                 return Ok("Object inserted with success");
             }
             catch (Exception e)
             {
-                _logger.LogError($"{nameof(Insert)} ({nameof(T)}): {e}");
-                throw;
+                _logger.LogError(e, "Failed inserting object of type {T}: {@Obj}", typeof(T), obj);
+                return BadRequest("Unable to insert object. If problem persists, contact an administrator");
             }
         }
         
@@ -117,18 +102,14 @@ namespace NetSimpleAuth.Backend.API.Controllers.v1
         {
             try
             {
-                _logger.LogInformation($"Begin - {nameof(Update)} ({nameof(T)})");
-
                 await _crudService.Update(obj);
-
-                _logger.LogInformation($"End - {nameof(Update)} ({nameof(T)})");
 
                 return Ok("Object updated with success");
             }
             catch (Exception e)
             {
-                _logger.LogError($"{nameof(Update)} ({nameof(T)}): {e}");
-                throw;
+                _logger.LogError(e, "Failed updating object of type {T}: {@Obj}", typeof(T), obj);
+                return BadRequest("Unable to update object. If problem persists, contact an administrator");
             }
         }
         
@@ -137,23 +118,19 @@ namespace NetSimpleAuth.Backend.API.Controllers.v1
         /// </summary>
         /// <param name="id">ID of the object to be deleted</param>
         /// <returns><see cref="ActionResult"/> of the operation</returns>
-        [HttpDelete("{id}")]
+        [HttpDelete("{id:int}")]
         public async Task<ActionResult> Delete(int id)
         {
             try
             {
-                _logger.LogInformation($"Begin - {nameof(Delete)} ({nameof(T)})");
-                
                 await _crudService.Delete(id);
                 
-                _logger.LogInformation($"End - {nameof(Delete)} ({nameof(T)})");
-
                 return Ok("Object deleted with success");
             }
             catch (Exception e)
             {
-                _logger.LogError($"{nameof(Delete)} ({nameof(T)}): {e}");
-                throw;
+                _logger.LogError(e, "Failed deleting object of type {T} and id = {$Id}", typeof(T), id);
+                return BadRequest("Unable to delete object. If problem persists, contact an administrator");
             }
         }
     }
