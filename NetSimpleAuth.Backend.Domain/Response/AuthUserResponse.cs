@@ -1,9 +1,8 @@
-﻿namespace NetSimpleAuth.Backend.Domain.Response
+﻿namespace NetSimpleAuth.Backend.Domain.Response;
+
+public class AuthUserResponse
 {
-    public class AuthUserResponse
-    {
-        public string Username { get; set; }
-        public string JwtToken { get; set; }
-        public string RefreshToken { get; set; }
-    }
+    public string Username { get; set; }
+    public string JwtToken { get; set; }
+    public string RefreshToken { get; set; }
 }

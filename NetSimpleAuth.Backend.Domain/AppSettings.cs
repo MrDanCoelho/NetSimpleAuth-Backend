@@ -1,13 +1,12 @@
-﻿namespace NetSimpleAuth.Backend.Domain
+﻿namespace NetSimpleAuth.Backend.Domain;
+
+public class AppSettings
 {
-    public class AppSettings
-    {
-        public string Secret { get; set; }
-        public ConnectionStrings ConnectionStrings { get; set; }
-    }
+    public string Secret { get; set; }
+    public ConnectionStrings ConnectionStrings { get; set; }
+}
     
-    public class ConnectionStrings
-    {
-        public string DefaultConnection { get; set; }
-    }
+public class ConnectionStrings
+{
+    public string DefaultConnection { get; set; }
 }

@@ -11,15 +11,9 @@ namespace NetSimpleAuth.Backend.Test.Services
 {
     public class CrudServiceTest
     {
-        private readonly Mock<ILogger<LogService>> _logger;
-        private readonly Mock<ILogRepository> _crudRepository;
-        
-        public CrudServiceTest()
-        {
-            _logger = new Mock<ILogger<LogService>>();
-            _crudRepository = new Mock<ILogRepository>();
-        }
-        
+        private readonly Mock<ILogger<LogService>> _logger = new();
+        private readonly Mock<ILogRepository> _crudRepository = new();
+
         [Fact]
         public async Task GetAll()
         {

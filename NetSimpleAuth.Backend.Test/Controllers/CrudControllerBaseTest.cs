@@ -12,21 +12,15 @@ namespace NetSimpleAuth.Backend.Test.Controllers
 {
     public class CrudControllerBaseTest
     {
-        private readonly Mock<ILogger<LogController>> _logger;
-        private readonly Mock<ILogService> _crudService;
+        private readonly Mock<ILogger<LogController>> _logger = new();
+        private readonly Mock<ILogService> _crudService = new();
 
 
-        public CrudControllerBaseTest()
-        {
-            _logger = new Mock<ILogger<LogController>>();
-            _crudService = new Mock<ILogService>();
-        }
-        
         [Fact]
         public async Task GetAll()
         {
             // Arrange
-            var logs = new LogEntity[]
+            var logs = new[]
             {
                 new LogEntity()
             };

@@ -12,19 +12,13 @@ using NetSimpleAuth.Backend.Domain.Interfaces.IServices;
 using NetSimpleAuth.Backend.Domain.Response;
 using Xunit;
 
-namespace NetPOC.Backend.Test.Controllers
+namespace NetSimpleAuth.Backend.Test.Controllers
 {
     public class LogControllerTest
     {
-        private readonly Mock<ILogger<LogController>> _logger;
-        private readonly Mock<ILogService> _logService;
+        private readonly Mock<ILogger<LogController>> _logger = new();
+        private readonly Mock<ILogService> _logService = new();
 
-
-        public LogControllerTest()
-        {
-            _logger = new Mock<ILogger<LogController>>();
-            _logService = new Mock<ILogService>();
-        }
 
         [Fact]
         public async Task InsertBatch()

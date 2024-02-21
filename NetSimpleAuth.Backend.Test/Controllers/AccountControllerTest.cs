@@ -7,18 +7,12 @@ using NetSimpleAuth.Backend.Domain.Dto;
 using NetSimpleAuth.Backend.Domain.Interfaces.IServices;
 using Xunit;
 
-namespace NetPOC.Backend.Test.Controllers
+namespace NetSimpleAuth.Backend.Test.Controllers
 {
     public class AccountControllerTest
     {
-        private readonly Mock<ILogger<AccountController>> _logger;
-        private readonly Mock<IAccountService> _accountService;
-
-        public AccountControllerTest()
-        {
-            _logger = new Mock<ILogger<AccountController>>();
-            _accountService = new Mock<IAccountService>();
-        }
+        private readonly Mock<ILogger<AccountController>> _logger = new();
+        private readonly Mock<IAccountService> _accountService = new();
 
         [Fact]
         public async Task Login()

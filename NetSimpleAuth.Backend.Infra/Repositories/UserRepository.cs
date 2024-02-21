@@ -2,20 +2,12 @@
 using NetSimpleAuth.Backend.Domain.Entities;
 using NetSimpleAuth.Backend.Domain.Interfaces.IRepositories;
 
-namespace NetSimpleAuth.Backend.Infra.Repositories
+namespace NetSimpleAuth.Backend.Infra.Repositories;
+
+public class UserRepository(ILogger<UserRepository> logger,
+        IUnitOfWork unitOfWork)
+    : CrudRepository<UserEntity>(logger, unitOfWork), IUserRepository
 {
-    public class UserRepository : CrudRepository<UserEntity>, IUserRepository
-    {
-        private readonly ILogger<UserRepository> _logger;
-        private readonly IUnitOfWork _unitOfWork;
-        
-        public UserRepository(
-            ILogger<UserRepository> logger, 
-            IUnitOfWork unitOfWork
-            ) : base(logger, unitOfWork)
-        {
-            _logger = logger;
-            _unitOfWork = unitOfWork;
-        }
-    }
+    private readonly ILogger<UserRepository> _logger = logger;
+    private readonly IUnitOfWork _unitOfWork = unitOfWork;
 }

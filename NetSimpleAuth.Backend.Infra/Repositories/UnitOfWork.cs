@@ -1,58 +1,51 @@
 ﻿using System.Data;
 using NetSimpleAuth.Backend.Domain.Interfaces.IRepositories;
 
-namespace NetSimpleAuth.Backend.Infra.Repositories
+namespace NetSimpleAuth.Backend.Infra.Repositories;
+
+public class UnitOfWork(IDbConnection dbConnection) : IUnitOfWork
 {
-    public class UnitOfWork : IUnitOfWork
+    private IDbTransaction _dbTransaction;
+
+    IDbConnection IUnitOfWork.DbConnection => dbConnection;
+    IDbTransaction IUnitOfWork.DbTransaction => _dbTransaction;
+
+    public void Begin()
     {
-        private readonly IDbConnection _dbConnection;
-        private IDbTransaction _dbTransaction;
-
-        public UnitOfWork(IDbConnection dbConnection)
-        {
-            _dbConnection = dbConnection;
-        }
-
-        IDbConnection IUnitOfWork.DbConnection => _dbConnection;
-        IDbTransaction IUnitOfWork.DbTransaction => _dbTransaction;
-
-        public void Begin()
-        {
-            if (_dbConnection.State == ConnectionState.Closed) _dbConnection.Open();
+        if (dbConnection.State == ConnectionState.Closed) dbConnection.Open();
             
-            if (_dbTransaction != null) return;
+        if (_dbTransaction != null) return;
             
-            _dbTransaction = _dbConnection.BeginTransaction();
-        }
+        _dbTransaction = dbConnection.BeginTransaction();
+    }
 
-        public void Dispose()
+    public void Dispose()
+    {
+        _dbTransaction?.Dispose();
+        _dbTransaction = null;
+    }
+
+    public void Rollback()
+    {
+        _dbTransaction.Rollback();
+    }
+
+    public void Commit()
+    {
+        if (_dbTransaction == null) return;
+
+        try
         {
-            _dbTransaction?.Dispose();
-            _dbTransaction = null;
+            _dbTransaction.Commit();
         }
-
-        public void Rollback()
+        catch
         {
-            _dbTransaction.Rollback();
+            Rollback();
+            throw;
         }
-
-        public void Commit()
+        finally
         {
-            if (_dbTransaction == null) return;
-
-            try
-            {
-                _dbTransaction.Commit();
-            }
-            catch
-            {
-                Rollback();
-                throw;
-            }
-            finally
-            {
-                Dispose();
-            }
+            Dispose();
         }
     }
 }

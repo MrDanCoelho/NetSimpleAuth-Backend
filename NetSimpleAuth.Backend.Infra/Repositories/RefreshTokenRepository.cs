@@ -2,20 +2,12 @@
 using NetSimpleAuth.Backend.Domain.Entities;
 using NetSimpleAuth.Backend.Domain.Interfaces.IRepositories;
 
-namespace NetSimpleAuth.Backend.Infra.Repositories
+namespace NetSimpleAuth.Backend.Infra.Repositories;
+
+public class RefreshTokenRepository(ILogger<RefreshTokenRepository> logger,
+        IUnitOfWork unitOfWork)
+    : CrudRepository<RefreshTokenEntity>(logger, unitOfWork), IRefreshTokenRepository
 {
-    public class RefreshTokenRepository : CrudRepository<RefreshTokenEntity>, IRefreshTokenRepository
-    {
-        private readonly ILogger<RefreshTokenRepository> _logger;
-        private readonly IUnitOfWork _unitOfWork;
-        
-        public RefreshTokenRepository(
-            ILogger<RefreshTokenRepository> logger, 
-            IUnitOfWork unitOfWork
-        ) : base(logger, unitOfWork)
-        {
-            _logger = logger;
-            _unitOfWork = unitOfWork;
-        }
-    }
+    private readonly ILogger<RefreshTokenRepository> _logger = logger;
+    private readonly IUnitOfWork _unitOfWork = unitOfWork;
 }

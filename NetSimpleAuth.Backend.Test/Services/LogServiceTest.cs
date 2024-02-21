@@ -14,14 +14,8 @@ namespace NetSimpleAuth.Backend.Test.Services
 {
     public class LogServiceTest
     {
-        private readonly Mock<ILogger<LogService>> _logger;
-        private readonly Mock<ILogRepository> _logRepository;
-        
-        public LogServiceTest()
-        {
-            _logger = new Mock<ILogger<LogService>>();
-            _logRepository = new Mock<ILogRepository>();
-        }
+        private readonly Mock<ILogger<LogService>> _logger = new();
+        private readonly Mock<ILogRepository> _logRepository = new();
 
         [Fact]
         public async Task InsertBatch()

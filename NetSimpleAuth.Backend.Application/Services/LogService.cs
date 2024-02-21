@@ -11,94 +11,91 @@ using NetSimpleAuth.Backend.Domain.Interfaces.IRepositories;
 using NetSimpleAuth.Backend.Domain.Interfaces.IServices;
 using NetSimpleAuth.Backend.Domain.Response;
 
-namespace NetSimpleAuth.Backend.Application.Services
+namespace NetSimpleAuth.Backend.Application.Services;
+
+/// <inheritdoc cref="ILogService" />
+public class LogService : CrudService<LogEntity>, ILogService
 {
-    /// <inheritdoc cref="ILogService" />
-    public class LogService : CrudService<LogEntity>, ILogService
+    private readonly ILogger<LogService> _logger;
+    private readonly ILogRepository _logRepository;
+        
+    public LogService(ILogger<LogService> logger, ILogRepository logRepository)
+        : base(logger, logRepository)
     {
-        private readonly ILogger<LogService> _logger;
-        private readonly ILogRepository _logRepository;
-        
-        public LogService(ILogger<LogService> logger, ILogRepository logRepository)
-            : base(logger, logRepository)
-        {
-            _logger = logger;
-            _logRepository = logRepository;
-        }
+        _logger = logger;
+        _logRepository = logRepository;
+    }
 
-        public async Task InsertBatch(StreamReader file)
+    public async Task InsertBatch(StreamReader file)
+    {
+        try
         {
-            try
+            var logList = new List<LogEntity>();
+            while (await file.ReadLineAsync() is { } line)
             {
-                string line;
+                _logger.LogDebug("Current line: {$Line}", line);
+                    
+                var values = line.Split(null).Select(a => a == "-"? null : a).ToArray();
+                    
+                Enum.TryParse(values[8], out HttpStatusCode parsedStatusCode);
+                int.TryParse(values[9], out var parsedContentSize);
 
-                var logList = new List<LogEntity>();
-                while ((line = await file.ReadLineAsync()) != null)
+                var logModel = new LogEntity
                 {
-                    _logger.LogDebug("Current line: {$Line}", line);
-                    
-                    var values = line.Split(null).Select(a => a == "-"? null : a).ToArray();
-                    
-                    Enum.TryParse(values[8], out HttpStatusCode parsedStatusCode);
-                    int.TryParse(values[9], out var parsedContentSize);
+                    Ip = values[0],
+                    App = values[1],
+                    User = values[2],
+                    Date = DateTime.ParseExact(values[3].TrimStart('[') + values[4].TrimEnd(']'), "dd/MMM/yyyy:HH:mm:sszzz", null),
+                    RequestType = values[5].TrimStart('"'),
+                    RequestUrl =  values[6],
+                    RequestProtocol = values[7].TrimEnd('"'),
+                    StatusCode = parsedStatusCode,
+                    ContentSize = parsedContentSize,
+                };
 
-                    var logModel = new LogEntity
-                    {
-                        Ip = values[0],
-                        App = values[1],
-                        User = values[2],
-                        Date = DateTime.ParseExact(values[3].TrimStart('[') + values[4].TrimEnd(']'), "dd/MMM/yyyy:HH:mm:sszzz", null),
-                        RequestType = values[5].TrimStart('"'),
-                        RequestUrl =  values[6],
-                        RequestProtocol = values[7].TrimEnd('"'),
-                        StatusCode = parsedStatusCode,
-                        ContentSize = parsedContentSize,
-                    };
+                if (values.Length > 10)
+                {
+                    logModel.ResponseUrl = values[10];
 
-                    if (values.Length > 10)
-                    {
-                        logModel.ResponseUrl = values[10];
-
-                        logModel.UserAgent = values[11].TrimStart('"');
+                    logModel.UserAgent = values[11].TrimStart('"');
                         
-                        var index = 11;
-                        while (index ++ < values.Length - 1)
-                        {
-                            logModel.UserAgent += " ";
-                            logModel.UserAgent += values[index];
-                        }
-                        
-                        logModel.UserAgent = logModel.UserAgent.TrimEnd('"');
+                    var index = 11;
+                    while (index ++ < values.Length - 1)
+                    {
+                        logModel.UserAgent += " ";
+                        logModel.UserAgent += values[index];
                     }
-
-                    logList.Add(logModel);
+                        
+                    logModel.UserAgent = logModel.UserAgent.TrimEnd('"');
                 }
+
+                logList.Add(logModel);
+            }
                 
-                await _logRepository.InsertAll(logList);
-                _logRepository.Save();
-            }
-            catch (Exception e)
-            {
-                _logger.LogError(e, "Error during batch insertion");
-                throw;
-            }
+            await _logRepository.InsertAll(logList);
+            _logRepository.Save();
         }
-        
-        public async Task<SelectPaginatedResponse<LogEntity>> SelectPaginated(LogFilterDto filter, int pageNumber, int pageSize)
+        catch (Exception e)
         {
-            try
-            {
-                var result = await _logRepository.SelectPaginated(filter, pageNumber, pageSize);
+            _logger.LogError(e, "Error during batch insertion");
+            throw;
+        }
+    }
+        
+    public async Task<SelectPaginatedResponse<LogEntity>> SelectPaginated(LogFilterDto filter, int pageNumber, int pageSize)
+    {
+        try
+        {
+            var result = await _logRepository.SelectPaginated(filter, pageNumber, pageSize);
                 
-                return result;
-            }
-            catch (Exception e)
-            {
-                _logger.LogError(e,
-                    "Pagination failed for filter = {@Filter}, page number = {$PageNumber} and page size = {$PageSize}",
-                    filter, pageNumber, pageSize);
-                throw;
-            }
+            return result;
+        }
+        catch (Exception e)
+        {
+            _logger.LogError(e,
+                "Pagination failed for filter = {@Filter}, page number = {$PageNumber} and page size = {$PageSize}",
+                filter, pageNumber, pageSize);
+            throw;
         }
     }
 }
